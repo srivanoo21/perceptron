@@ -44,6 +44,6 @@ if __name__ == '__main__':  # << entry point
         loggin.info(">>>> starting training >>>>")
         main(data=OR, eta=ETA, epochs=EPOCHS, filename='or.model', plotFileName='or.png', test=22)  # test included to test logging
         loggin.info("<<<< training done successfully <<<<")
-    except Exception as e: ##
+    except Exception as e: 
         logging.exception(e)
         raise e 
