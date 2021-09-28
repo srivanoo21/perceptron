@@ -7,28 +7,30 @@ from utils.model import Perceptron
 from utils.all_utils import prepare_data, save_model, save_plot
 import pandas as pd
 import numpy as np
+import logging
 
-AND = {
-    "x1": [0, 0, 1, 1],
-    "x2": [0, 1, 0, 1],
-    "y": [0, 0, 0, 1]
-}
-df = pd.DataFrame(AND)
+logging_str = "[%(asctime)s: %(levelname)s: %(module)s] %(message)s"
+log_dir = "logs"
+ok.makedirs(log_dir, exist_ok=True)
+logging.basicConfig(filename=os.path.join(log_dir, 'running_logs.log'), level=logging.INFO, format=logging_str, filemode='a')
 
-print(df)
+def main(data, eta, epochs, filename, plotFileName):
+    
+    df = pd.DataFrame(data)
 
-X, y = prepare_data(df)
+    logging.info(f"This is actual dataframe {df}")
 
-ETA = 0.3   # between 0 and 1
-EPOCHS = 10
+    X, y = prepare_data(df)
 
-model = Perceptron(eta=ETA, epochs=EPOCHS)
-model.fit(X, y)
 
-_ = model.total_loss()
+    model = Perceptron(eta=eta, epochs=epochs)
+    model.fit(X, y)
 
-save_model(model, filename='and.model')
-save_plot(df, "and.png", model)
+    _ = model.total_loss()
+
+    save_model(model, filename=filename)
+    save_plot(df, plotFileName, model)
+
 
 if __name__ == '__main__':  # << entry point
     AND = {
@@ -38,5 +40,10 @@ if __name__ == '__main__':  # << entry point
     }
     ETA = 0.3   # between 0 and 1
     EPOCHS = 10
-    
-    main(data=OR, eta=ETA, epochs=EPOCHS, filename='and.model', plotFileName='and.png')
+    try:
+        loggin.info(">>>> starting training >>>>")
+        main(data=AND, eta=ETA, epochs=EPOCHS, filename='and.model', plotFileName='and.png', test=22)  # test included to test logging
+        loggin.info("<<<< training done successfully <<<<")
+    except Exception as e: 
+        logging.exception(e)
+        raise e 
